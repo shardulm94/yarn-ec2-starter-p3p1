@@ -1,0 +1,130 @@
+{
+    "YARNaddr": "r0",
+    "YARNport": 9090,
+    "rack_cap": [
+        4,
+        6,
+        6,
+        6
+    ],
+    "simtype": "none",
+    "tetrischedPort": 9091,
+    "traces": {
+        "GPU": {
+            "durationList": [{
+                "duration": 23,
+                "job": "bt.A.x",
+                "slowduration": 46
+            }, {
+                "duration": 99,
+                "job": "bt.B.x",
+                "slowduration": 196
+            }, {
+                "duration": 410,
+                "job": "bt.C.x",
+                "slowduration": 806
+            }, {
+                "duration": 172,
+                "job": "bt.J.x",
+                "slowduration": 340
+            }, {
+                "duration": 274,
+                "job": "bt.K.x",
+                "slowduration": 539
+            }, {
+                "duration": 330,
+                "job": "bt.L.x",
+                "slowduration": 655
+            }, {
+                "duration": 487,
+                "job": "bt.M.x",
+                "slowduration": 969
+            }, {
+                "duration": 588,
+                "job": "bt.N.x",
+                "slowduration": 1167
+            }, {
+                "duration": 74,
+                "job": "sp.B.x",
+                "slowduration": 145
+            }, {
+                "duration": 290,
+                "job": "sp.C.x",
+                "slowduration": 567
+            }, {
+                "duration": 60,
+                "job": "cg.B.x",
+                "slowduration": 114
+            }, {
+                "duration": 168,
+                "job": "cg.C.x",
+                "slowduration": 322
+            }],
+            "jobtype": 2
+        },
+        "MPI": {
+            "durationKList": [{
+                "duration": 17,
+                "job": "ft.B.4",
+                "k": 4,
+                "slowduration": 26
+            }, {
+                "duration": 73,
+                "job": "ft.C.4",
+                "k": 4,
+                "slowduration": 108
+            }, {
+                "duration": 105,
+                "job": "ft.J.4",
+                "k": 4,
+                "slowduration": 156
+            }, {
+                "duration": 138,
+                "job": "ft.K.4",
+                "k": 4,
+                "slowduration": 205
+            }, {
+                "duration": 171,
+                "job": "ft.L.4",
+                "k": 4,
+                "slowduration": 254
+            }, {
+                "duration": 200,
+                "job": "ft.M.4",
+                "k": 4,
+                "slowduration": 287
+            }, {
+                "duration": 234,
+                "job": "ft.N.4",
+                "k": 4,
+                "slowduration": 342
+            }, {
+                "duration": 32,
+                "job": "ft.O.4",
+                "k": 4,
+                "slowduration": 49
+            }, {
+                "duration": 46,
+                "job": "ft.P.4",
+                "k": 4,
+                "slowduration": 70
+            }, {
+                "duration": 60,
+                "job": "ft.Q.4",
+                "k": 4,
+                "slowduration": 92
+            }, {
+                "duration": 75,
+                "job": "ft.R.4",
+                "k": 4,
+                "slowduration": 116
+            }, {
+                "duration": 90,
+                "job": "ft.T.4",
+                "k": 4,
+                "slowduration": 137
+            }],
+            "jobtype": 0
+        }
+    }
+}
