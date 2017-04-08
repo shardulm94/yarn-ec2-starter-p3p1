@@ -29,14 +29,14 @@ sudo ydown
 # Kill any currently running policy servers....
 sudo killall MyPolicyServer
 
-# Restart YARN...
-sudo yup
-
 # Purge old logs...
 sudo rm -f /tmp/my_policy_server.log
 sudo rm -f /tmp/my_policy_server.out
 
 sudo rm -f /srv/yarn/results.txt
+
+# Restart YARN...
+sudo yup
 
 # Start our new policy server daemon
 nohup src/MyPolicyServer </dev/null 1>/tmp/my_policy_server.out 2>/tmp/my_policy_server.log &
@@ -47,7 +47,7 @@ sleep 0.1
 echo ""
 echo "OK - policy server appears to be runnung..."
 echo "--------------------"
-echo "!!! COOL !!!"
+echo "!!! POLSRVR UP !!!"
 
 exit 0
 
