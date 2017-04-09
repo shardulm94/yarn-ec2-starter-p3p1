@@ -18,8 +18,11 @@
 # limitations under the License.
 #
 
-if [ ! -f src/MyPolicyServer ] ; then
-    echo "PolicyServer binary not found... exit"
+# XXX: replace this with your implementation
+POLSRVR=MyPolicyServer
+
+if [ ! -f src/$POLSRVR ] ; then
+    echo "FATAL: $POLSRVR binary not built... exit"
     exit 1
 fi
 
@@ -27,27 +30,30 @@ fi
 sudo ydown
 
 # Kill any currently running policy servers....
-sudo killall MyPolicyServer
+sudo killall $POLSRVR
 
-# Purge old logs...
+# Purge old log files....
 sudo rm -f /tmp/my_policy_server.log
 sudo rm -f /tmp/my_policy_server.out
 
 sudo rm -f /srv/yarn/results.txt
 
-# Restart YARN...
+# Restart YARN....
 sudo yup
-
-# Start our new policy server daemon
-nohup src/MyPolicyServer </dev/null 1>/tmp/my_policy_server.out 2>/tmp/my_policy_server.log &
+echo ""
+echo ""
+sleep 0.1
+# Start a new policy server daemon
+echo "Starting policy server..."
+export MY_CONFIG="$(cd `dirname $0` && pwd -P)/job-conf.json"
+nohup src/$POLSRVR </dev/null 1>/tmp/my_policy_server.out 2>/tmp/my_policy_server.log &
 echo "Redirecting stdout to /tmp/my_policy_server.out..."
 echo "Redirecting stderr to /tmp/my_policy_server.log..."
 sleep 0.1
 
 echo ""
-echo "OK - policy server appears to be runnung..."
+echo "OK - running in background"
 echo "--------------------"
 echo "!!! POLSRVR UP !!!"
 
 exit 0
-
