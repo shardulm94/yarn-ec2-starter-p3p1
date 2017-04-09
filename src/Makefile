@@ -1,10 +1,12 @@
+current_dir = $(shell pwd -P)
 THRIFT_PREFIX=/usr/local/thrift
+RAPIDJSON_PREFIX=$(current_dir)/../lib/rapidjson-1.1.0
 
 TARGETS = MyPolicyServer TetrischedService_sample_server YARNTetrischedService_sample_client
 HPPFILES = tetrisched_constants.h tetrisched_types.h YARNTetrischedService.h TetrischedService.h
 OBJS = tetrisched_constants.o tetrisched_types.o YARNTetrischedService.o TetrischedService.o
 
-CXXFLAGS = -I$(THRIFT_PREFIX)/include -g -O2 -std=c++11 -Wall
+CXXFLAGS = -I$(THRIFT_PREFIX)/include -I$(RAPIDJSON_PREFIX)/include -g -O2 -std=c++11 -Wall
 LDFLAGS = -L$(THRIFT_PREFIX)/lib -lthrift
 CXX = g++
 
@@ -28,4 +30,3 @@ MyPolicyServer.o: MyPolicyServer.cc MyPolicyServer.h $(HPPFILES)
 
 clean:
 	-rm -f $(TARGETS) *.o
-

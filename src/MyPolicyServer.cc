@@ -12,6 +12,12 @@
  * limitations under the License.
  */
 
+#include <string>
+#include <fstream>
+#include <sstream>
+#include <bitset>
+#include <deque>
+
 #include "MyPolicyServer.h"
 
 #include "YARNTetrischedService.h"
@@ -24,11 +30,8 @@
 #include <thrift/transport/TTransportUtils.h>
 #include <thrift/transport/TSocket.h>
 
+#include <rapidjson/document.h>
 #include <stdlib.h>
-
-#include <bitset>
-#include <deque>
-#include <string>
 
 using namespace ::apache::thrift;
 using namespace ::apache::thrift::protocol;
@@ -54,10 +57,11 @@ class MyTetrischedServiceHandler: public TetrischedServiceIf {
   std::string yarnHost_;
   int yarnPort_;
  public:
-  MyTetrischedServiceHandler() {
+  MyTetrischedServiceHandler(int numMachines) {
+    numMachines_ = numMachines;
+    fprintf(stderr, "== Total num machines: %d\n\n", numMachines_);
     yarnHost_ = "r0";
     yarnPort_ = 9090;
-    numMachines_ = 22;
   }
 
   void Schedule(JobID jobId, const std::set<int32_t>& machines) {
@@ -111,7 +115,9 @@ class MyTetrischedServiceHandler: public TetrischedServiceIf {
   }
 
   virtual void FreeResources(const std::set<int32_t>& machines) override {
+    fprintf(stderr, "Free machines -> %d machines...\n", int(machines.size()));
     for (auto it = machines.begin(); it != machines.end(); ++it) {
+      fprintf(stderr, " > machine %d\n", int(*it));
       machineMap_[*it] = 0;  // Mark machine as free
     }
 
@@ -134,10 +140,39 @@ class MyTetrischedServiceHandler: public TetrischedServiceIf {
   }
 };
 
+static rapidjson::Document* LoadExternalJsonConfig(const char* jsonf) {
+  std::ifstream ifs(jsonf);
+  std::stringstream buf;
+  buf << ifs.rdbuf();
+  std::string input = buf.str();
+  rapidjson::Document* d = new rapidjson::Document;
+  d->Parse(input.c_str());
+  return d;
+}
+
+static int GetNumMachines(rapidjson::Document* d) {
+  int result = 0;
+  const rapidjson::Value& rack_cap = (*d)["rack_cap"];
+  for (size_t i = 0; i < rack_cap.Size(); ++i) {
+    result += rack_cap[i].GetInt();
+  }
+  return result;
+}
+
 int main(int argc, char* argv[]) {
+  int numMachines = 22;  // 4 large nodes + 18 small ones by default
   int myPort = 9091;
 
-  TetrischedServiceIf* const myhandler = new MyTetrischedServiceHandler<>();
+  // Load json configuration from an external file
+  const char* jsonf = getenv("MY_CONFIG");  // exported by run-policy-server.sh
+  if (jsonf != NULL) {
+    fprintf(stderr, "Loading json config from %s\n", jsonf);
+    auto json = LoadExternalJsonConfig(jsonf);
+    numMachines = GetNumMachines(json);
+    delete json;
+  }
+
+  TetrischedServiceIf* const myhandler = new MyTetrischedServiceHandler<>(numMachines);
 
   boost::shared_ptr<TetrischedServiceIf>
       handler(myhandler);
